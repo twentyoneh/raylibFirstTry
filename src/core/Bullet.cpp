@@ -5,6 +5,11 @@ Bullet::Bullet(int x, int y, float rotation, float speed /*= 100.0f*/)
 {
 }
 
+Bullet::~Bullet()
+{
+
+}
+
 void Bullet::Update(float deltaTime)
 {
 	x += cosf(rotation_ * (PI / 180.0)) * speed_ * deltaTime;

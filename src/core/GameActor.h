@@ -13,12 +13,16 @@ class GameActor
 		virtual void DMove();
 		virtual void WMove();
 
+		//если метод не реализован, кидаем исключение
+		virtual void Shot(BulletManager& bulletManager) { throw std::runtime_error("Shot method not implemented for this actor."); };
+
 		virtual void Update(float deltaTime) {};
 		virtual void Draw() {};
 
 		int getX() const { return x; };
 		int getY() const { return y; };
-		void setPosition(float newX, float newY) { x = newX; y = newY; };
+		void setPosition(int newX, int newY) { x = newX; y = newY; };
+		Vector2 getPosition() const { return Vector2{ static_cast<float>(x), static_cast<float>(y) }; };
 
 	protected:
 		int x;

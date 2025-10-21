@@ -3,5 +3,5 @@
 
 class ShootCommand : public ICommand {
 public:
-	void execute(Player& player) override { player.Shot(); }
+	void execute(GameActor& player, BulletManager& bulletManager) override { player.Shot(bulletManager); }
 };

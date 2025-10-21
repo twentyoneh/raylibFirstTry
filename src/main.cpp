@@ -22,16 +22,17 @@ int main(void)
 	// Main game loop
 	while (!WindowShouldClose()) 
 	{
+		float deltaTime = GetFrameTime();
 		// Обработка ввода
 		std::unique_ptr<ICommand> command = inputHandler.handleInput();
 		if(command) command->execute(player);
 
-
+		player.Update(deltaTime);
 
 		BeginDrawing();
 
 		ClearBackground(RAYWHITE);
-		DrawCircle(player.getX(), player.getY(), 25, MAROON);
+		player.Draw();
 
 		EndDrawing();
 	}

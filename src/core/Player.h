@@ -1,8 +1,11 @@
 #pragma once
 #include "GameActor.h"
 #include "raylib.h"
-#include "Bullet.h"
+//#include "Bullet.h"
+#include "BulletManager.h"
 #include <string>
+#include <iostream>
+#include <vector>
 
 class Player : public GameActor
 {
@@ -15,7 +18,7 @@ class Player : public GameActor
 		void DMove() override;
 		void WMove() override;
 
-		void Shot();
+		void Shot(BulletManager& bulletManager) override;
 
 		void Update(float deltaTime) override;
 		void Draw() override;
@@ -24,5 +27,5 @@ class Player : public GameActor
 	private:
 		std::string name;
 		float health;
-		float speed;
+		int speed;
 };
