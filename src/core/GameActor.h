@@ -1,46 +1,17 @@
+#pragma once
+#include <stdexcept>
 
 class GameActor
 {
-public:
-	GameActor();
-	~GameActor();
-
-	//TODO: Нарисовать схему как это всё работает и подумать над игроком... 
-	void AMove()
-	{
-		throw std::logic_error("The method or operation is not implemented.");
-	}
-
-
-
-	void SMove()
-	{
-		throw std::logic_error("The method or operation is not implemented.");
-	}
-
-
-
-	void DMove()
-	{
-		throw std::logic_error("The method or operation is not implemented.");
-	}
-
-
-
-	void WMove()
-	{
-		throw std::logic_error("The method or operation is not implemented.");
-	}
-
-
-private:
+	public:
+		GameActor();
+		~GameActor();
+	
+		//TODO: Нарисовать схему как это всё работает и подумать над игроком... 
+		void AMove();
+		void SMove();
+		void DMove();
+		void WMove();
+	private:
 
 };
-
-GameActor::GameActor()
-{
-}
-
-GameActor::~GameActor()
-{
-}

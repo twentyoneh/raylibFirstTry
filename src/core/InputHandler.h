@@ -1,12 +1,14 @@
-#include "Command.h"
+#pragma once
+#include "ICommand.h"
 
-class InputHandler {
-public:
-	Command* handleInput();
-
-private:
-	Command* buttonW_;
-	Command* buttonA_;
-	Command* buttonS_;
-	Command* buttonD_;
+class InputHandler 
+{
+	public:
+		ICommand* handleInput();
+	
+	private:
+		ICommand* buttonW_;
+		ICommand* buttonA_;
+		ICommand* buttonS_;
+		ICommand* buttonD_;
 };

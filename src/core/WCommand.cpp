@@ -1,10 +1,9 @@
-#include "Command.h"
-#include <stdexcept>
+#include "ICommand.h"
 
-class WCommand : public Command
+class WCommand : public ICommand
 {
 public:
-	virtual void execute(GameActor& actor);
+	void execute(GameActor& actor) override;
 
 };
 
