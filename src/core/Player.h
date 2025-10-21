@@ -18,7 +18,7 @@ class Player : public GameActor
 		void DMove() override;
 		void WMove() override;
 
-		void Shot(BulletManager& bulletManager) override;
+		void Shot(BulletManager& bulletManager);
 
 		void Update(float deltaTime) override;
 		void Draw() override;
