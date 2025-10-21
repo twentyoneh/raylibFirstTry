@@ -1,12 +1,12 @@
 #include "InputHandler.h"
-#include "raylib.h"
 
 
-ICommand* InputHandler::handleInput() {
-	if (IsKeyPressed(KEY_W)) return buttonW_;
-	if (IsKeyPressed(KEY_A)) return buttonA_;
-	if (IsKeyPressed(KEY_S)) return buttonS_;
-	if (IsKeyPressed(KEY_D)) return buttonD_;
 
-	return NULL;
+std::unique_ptr<ICommand> InputHandler::handleInput() {
+	if (IsKeyDown(KEY_W)) return std::make_unique<MoveUpCommand>();
+	if (IsKeyDown(KEY_A)) return std::make_unique<MoveLeftCommand>();
+	if (IsKeyDown(KEY_S)) return std::make_unique<MoveDownCommand>();
+	if (IsKeyDown(KEY_D)) return std::make_unique<MoveRightCommand>();
+
+	return nullptr;
 }

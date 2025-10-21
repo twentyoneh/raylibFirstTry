@@ -2,33 +2,12 @@
 
 
 
-GameActor::GameActor()
-{
+GameActor::GameActor(float x, float y) : x(x), y(y) {}
 
-}
 
-GameActor::~GameActor()
-{
+GameActor::~GameActor() {}
 
-}
-
-void GameActor::AMove()
-{
-	throw std::logic_error("The method or operation is not implemented.");
-}
-
-void GameActor::SMove()
-{
-	throw std::logic_error("The method or operation is not implemented.");
-}
-
-void GameActor::DMove()
-{
-	throw std::logic_error("The method or operation is not implemented.");
-}
-
-void GameActor::WMove()
-{
-	throw std::logic_error("The method or operation is not implemented.");
-}
-
+void GameActor::AMove() { x -= 1.0f; }
+void GameActor::SMove() { y -= 1.0f; }
+void GameActor::DMove() { x += 1.0f; }
+void GameActor::WMove() { y += 1.0f; }
