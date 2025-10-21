@@ -1,5 +1,7 @@
 #pragma once
 #include "GameActor.h"
+#include "raylib.h"
+#include "Bullet.h"
 #include <string>
 
 class Player : public GameActor
@@ -13,7 +15,10 @@ class Player : public GameActor
 		void DMove() override;
 		void WMove() override;
 
-		void Update() override;
+		void Shot();
+
+		void Update(float deltaTime) override;
+		void Draw() override;
 
 		std::string getName() const { return name; };
 	private:

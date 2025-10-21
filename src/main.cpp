@@ -3,7 +3,6 @@
 #include <iostream>
 #include "core/Player.h"
 #include "core/InputHandler.h"
-#include "commands/MoveCommands.h"
 
 
 const int screenWidth = 800;
@@ -23,13 +22,16 @@ int main(void)
 	// Main game loop
 	while (!WindowShouldClose()) 
 	{
-		auto command = inputHandler.handleInput();
+		// Обработка ввода
+		std::unique_ptr<ICommand> command = inputHandler.handleInput();
 		if(command) command->execute(player);
+
+
 
 		BeginDrawing();
 
 		ClearBackground(RAYWHITE);
-		DrawCircle(player.getX(), player.getY(), 50, MAROON);
+		DrawCircle(player.getX(), player.getY(), 25, MAROON);
 
 		EndDrawing();
 	}

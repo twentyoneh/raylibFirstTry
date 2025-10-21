@@ -13,13 +13,14 @@ class GameActor
 		virtual void DMove();
 		virtual void WMove();
 
-		virtual void Update() {};
+		virtual void Update(float deltaTime) {};
+		virtual void Draw() {};
 
-		float getX() const { return x; };
-		float getY() const { return y; };
-		float setPosition(float newX, float newY) { x = newX; y = newY; };
+		int getX() const { return x; };
+		int getY() const { return y; };
+		void setPosition(float newX, float newY) { x = newX; y = newY; };
 
 	protected:
-		float x;
-		float y;
+		int x;
+		int y;
 };

@@ -20,7 +20,20 @@ void Player::DMove() { x += speed; }
 
 void Player::WMove() { y -= speed; }
 
-void Player::Update()
+void Player::Shot()
+{
+	//Vector2 mousePosition = GetMousePosition();
+
+
+
+}
+
+void Player::Update(float deltaTime)
+{
+
+}
+
+void Player::Draw()
 {
 
 }
