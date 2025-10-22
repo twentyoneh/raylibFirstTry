@@ -27,7 +27,7 @@ void MenuScene::handleInput(SceneContext& ctx) {
 	if (ctx.input.pressed(Action::Back)) wantExit_ = true;
 }
 
-Transition MenuScene::update(SceneContext&, float) {
+Transition MenuScene::update() {
 	if (wantStart_) {
 		 //return Transition::Swap([]{ return std::make_unique<PlayScene>(); });
 		return Transition::None(); // пока PlayScene нет

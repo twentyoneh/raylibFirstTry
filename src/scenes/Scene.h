@@ -49,7 +49,7 @@ public:
 
 	virtual void handleInput(SceneContext&) = 0;
 
-	virtual Transition update(SceneContext&, float deltaTime) = 0;
+	virtual Transition update() = 0;
 	virtual void draw(SceneContext&) const = 0;
 
 	virtual bool blocksUpdate() const { return true; }

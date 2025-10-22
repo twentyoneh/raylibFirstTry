@@ -1,22 +1,16 @@
 #pragma once
 #include "raylib.h"
+#include "Input.h"
+#include "Action.h"
 
-enum class Action { 
-	Up, 
-	Down, 
-	Left, 
-	Right, 
-	Confirm, 
-	Back, 
-	None 
-};
-
-struct MenuInput {
-	void poll();
-	bool pressed(Action a) const;
-	bool down(Action a) const;
+class MenuInput : public Input 
+{
+public:
+	void poll() override;
+	bool pressed(Action a) const override;
+	bool down(Action a) const override;
 
 private:
-	bool pUp = false, pDown = false, pLeft = false, pRight = false, pConfirm = false, pBack = false;
-	bool dUp = false, dDown = false, dLeft = false, dRight = false, dConfirm = false, dBack = false;
+	bool pConfirm = false, pBack = false;
+	bool dConfirm = false, dBack = false;
 };

@@ -10,7 +10,7 @@ void SceneStack::update(float deltaTime) {
 	if (stack_.empty()) return;
 
 	for (int i = static_cast<int>(stack_.size()) - 1; i >= 0; --i) {
-		Transition t = stack_[i]->update(ctx_, deltaTime);
+		Transition t = stack_[i]->update();
 		if (t.type != TransitionType::None) {
 			apply(t);
 			return;
