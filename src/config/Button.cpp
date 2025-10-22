@@ -1,10 +1,7 @@
 #include "Button.h"
 
-bool Button::draw(const UiMenuTheme& theme, bool focused) {
-	Vector2 m = GetMousePosition();
-	bool hover = CheckCollisionPointRec(m, rect_) || focused;
-
-	DrawRectangleRec(rect_, hover ? theme.btnHover : theme.btn);
+bool Button::draw(const UiMenuTheme& theme, bool focused) const {
+	DrawRectangleRec(rect_, focused ? theme.btnHover : theme.btn);
 	DrawRectangleLinesEx(rect_, 2.f, theme.btnBorder);
 
 	int fs = theme.btnSize;
@@ -13,5 +10,5 @@ bool Button::draw(const UiMenuTheme& theme, bool focused) {
 		int(rect_.x + (rect_.width - tw) / 2),
 		int(rect_.y + (rect_.height - fs) / 2), fs, RAYWHITE);
 
-	return hover && IsMouseButtonPressed(MOUSE_LEFT_BUTTON);
+	return focused;
 }

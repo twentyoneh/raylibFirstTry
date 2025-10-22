@@ -31,6 +31,7 @@ void SceneStack::draw() const {
 	}
 }
 
+// добавление в стек —цены
 void SceneStack::push(std::unique_ptr<Scene> s) {
 	s->onEnter(ctx_);
 	stack_.push_back(std::move(s));

@@ -14,8 +14,10 @@ void MenuScene::onEnter(SceneContext& ctx) {
 
 void MenuScene::handleInput(SceneContext& ctx) {
 	ctx.input.poll();
-	if (ctx.input.pressed(Action::Down)) focused_ = (focused_ + 1) % buttons_.size();
-	if (ctx.input.pressed(Action::Up))   focused_ = static_cast<int>((focused_ - 1 + buttons_.size()) % buttons_.size());
+	if (ctx.input.pressed(Action::Down)) 
+		focused_ = (focused_ + 1) % buttons_.size();
+	if (ctx.input.pressed(Action::Up))   
+		focused_ = static_cast<int>((focused_ - 1 + buttons_.size()) % buttons_.size());
 
 	if (ctx.input.pressed(Action::Confirm)) {
 		if (focused_ == 0) wantStart_ = true;
@@ -26,18 +28,13 @@ void MenuScene::handleInput(SceneContext& ctx) {
 }
 
 Transition MenuScene::update(SceneContext&, float) {
-	// Клики мышью по кнопкам
-	if (buttons_[0].draw(UiMenuTheme{}, false)) wantStart_ = true;     // рисовать в draw() правильнее; здесь лень копировать тему
-	if (buttons_[1].draw(UiMenuTheme{}, false)) wantOptions_ = true;
-	if (buttons_[2].draw(UiMenuTheme{}, false)) wantExit_ = true;
-
 	if (wantStart_) {
-		// return Transition::Swap([]{ return std::make_unique<PlayScene>(); });
+		 //return Transition::Swap([]{ return std::make_unique<PlayScene>(); });
 		return Transition::None(); // пока PlayScene нет
 	}
 	if (wantOptions_) {
 		// return Transition::Push([]{ return std::make_unique<OptionsScene>(); });
-		wantOptions_ = false; // заглушка
+		wantOptions_ = false;
 	}
 	if (wantExit_) {
 		CloseWindow();
@@ -48,6 +45,6 @@ Transition MenuScene::update(SceneContext&, float) {
 void MenuScene::draw(SceneContext& ctx) const {
 	DrawText("TOP-DOWN SHOOTER", 40, 40, ctx.ui.titleSize, ctx.ui.title);
 	for (int i = 0; i < (int)buttons_.size(); ++i) {
-		const_cast<Button&>(buttons_[i]).draw(ctx.ui, i == focused_);
+		buttons_[i].draw(ctx.ui, i == focused_);
 	}
 }

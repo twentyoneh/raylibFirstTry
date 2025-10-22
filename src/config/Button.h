@@ -7,7 +7,7 @@ class Button {
 public:
 	Button(std::string text, Rectangle rect) : text_(std::move(text)), rect_(rect) {}
 	void setRect(Rectangle r) { rect_ = r; }
-	bool draw(const UiMenuTheme& t, bool focused);
+	bool draw(const UiMenuTheme& t, bool focused) const;
 
 private:
 	std::string text_;

@@ -7,15 +7,16 @@ void MenuInput::poll() {
 	dLeft = IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A);
 	dRight = IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D);
 	dConfirm = IsKeyDown(KEY_ENTER) || IsKeyDown(KEY_SPACE) || IsMouseButtonDown(MOUSE_LEFT_BUTTON);
-	dBack = IsKeyDown(KEY_ESCAPE) || IsMouseButtonDown(MOUSE_RIGHT_BUTTON);
+	dBack = IsKeyDown(KEY_ESCAPE);
 
 	pUp = IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W);
 	pDown = IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S);
 	pLeft = IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_A);
 	pRight = IsKeyPressed(KEY_RIGHT) || IsKeyPressed(KEY_D);
 	pConfirm = IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE) || IsMouseButtonPressed(MOUSE_LEFT_BUTTON);
-	pBack = IsKeyPressed(KEY_ESCAPE) || IsMouseButtonPressed(MOUSE_RIGHT_BUTTON);
+	pBack = IsKeyPressed(KEY_ESCAPE);
 }
+
 bool MenuInput::pressed(Action a) const {
 	switch (a) {
 	case Action::Up: return pUp; 

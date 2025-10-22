@@ -5,6 +5,6 @@
 class ICommand
 {
 	public:
-		virtual ~ICommand();
+		virtual ~ICommand() {};
 		virtual void execute(GameActor& actor) = 0;
 };

@@ -16,7 +16,7 @@ class Player : public GameActor
 		void DMove() override;
 		void WMove() override;
 
-		void Shot();
+		void Shot() override;
 
 		void Update(float deltaTime) override;
 		void Draw() override;
