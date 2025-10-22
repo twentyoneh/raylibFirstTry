@@ -1,6 +1,6 @@
 #pragma once
 #include <stdexcept>
-#include "BulletManager.h"
+#include "raylib.h"
 
 class GameActor
 {
@@ -15,7 +15,7 @@ class GameActor
 		virtual void WMove();
 
 		//если метод не реализован, кидаем исключение
-		virtual void Shot(BulletManager& bulletManager) { throw std::runtime_error("Shot method not implemented for this actor."); };
+		virtual void Shot() { throw std::runtime_error("Shot method not implemented for this actor."); };
 
 		virtual void Update(float deltaTime) {};
 		virtual void Draw() {};

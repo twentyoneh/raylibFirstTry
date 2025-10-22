@@ -21,14 +21,12 @@ void Player::DMove() { x += speed; }
 
 void Player::WMove() { y -= speed; }
 
-void Player::Shot(BulletManager& bulletManager)
+void Player::Shot()
 {
 	std::cout << name << " fired a shot!" << std::endl;
 	Vector2 mousePos = GetMousePosition();
 	Vector2 dir = Vector2Normalize(Vector2Subtract(mousePos, getPosition()));
 	float rotation = atan2f(dir.y, dir.x) * (180.0f / PI);
-
-	bulletManager.addBullet(getPosition(), rotation, 500.0f);
 }
 
 void Player::Update(float deltaTime)
