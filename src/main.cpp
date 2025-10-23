@@ -4,18 +4,20 @@
 #include "scenes/MenuScene.h"
 #include "scenes/SceneContext.h"
 #include "scenes/SceneStack.h"
+#include "scenes/MenuSceneContext.h"
 
 int main(void)
 {
 	InitWindow(1280, 720, "Scenes + Menu");
 	SetTargetFPS(60);
 
-	SceneContext ctx;
+	MenuScheneContext ctx;
 	ctx.screenW = GetScreenWidth();
 	ctx.screenH = GetScreenHeight();
+	
 
 	SceneStack stack(ctx);
-	stack.push(std::make_unique<MenuScene>());
+	stack.push(std::make_unique<MenuScene>(ctx));
 
 	while (!WindowShouldClose()) {
 		float dt = GetFrameTime();
@@ -23,8 +25,9 @@ int main(void)
 		stack.handleInput();
 		stack.update(dt);
 
+		if (stack.wantsExit()) break;
+
 		BeginDrawing();
-		ClearBackground(ctx.ui.bg);
 		stack.draw();
 		EndDrawing();
 	}

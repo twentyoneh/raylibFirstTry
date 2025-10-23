@@ -2,7 +2,7 @@
 #include <raylib.h>
 // #include "PlayScene.hpp" // когда появится
 
-void MenuScene::onEnter(SceneContext& ctx) {
+void MenuScene::onEnterT(MenuScheneContext& ctx) {
 	float w = ctx.ui.btnW, h = ctx.ui.btnH, s = ctx.ui.spacing;
 	float x = (ctx.screenW - w) / 2.f;
 	float y = (ctx.screenH - (3 * h + 2 * s)) / 2.f;
@@ -12,7 +12,7 @@ void MenuScene::onEnter(SceneContext& ctx) {
 	buttons_.emplace_back("EXIT", Rectangle{ x,y + 2 * (h + s),w,h });
 }
 
-void MenuScene::handleInput(SceneContext& ctx) {
+void MenuScene::handleInputT(MenuScheneContext& ctx) {
 	ctx.input.poll();
 	if (ctx.input.pressed(Action::Down)) 
 		focused_ = (focused_ + 1) % buttons_.size();
@@ -27,7 +27,7 @@ void MenuScene::handleInput(SceneContext& ctx) {
 	if (ctx.input.pressed(Action::Back)) wantExit_ = true;
 }
 
-Transition MenuScene::update() {
+Transition MenuScene::updateT(MenuScheneContext& ctx, float dt) {
 	if (wantStart_) {
 		 //return Transition::Swap([]{ return std::make_unique<PlayScene>(); });
 		return Transition::None(); // пока PlayScene нет
@@ -37,13 +37,15 @@ Transition MenuScene::update() {
 		wantOptions_ = false;
 	}
 	if (wantExit_) {
-		CloseWindow();
+		return Transition::Exit();
 	}
 	return Transition::None();
 }
 
-void MenuScene::draw(SceneContext& ctx) const {
+void MenuScene::drawT(MenuScheneContext& ctx) const {
+	if(wantExit_) return
 	DrawText("TOP-DOWN SHOOTER", 40, 40, ctx.ui.titleSize, ctx.ui.title);
+	ClearBackground(ctx.ui.bg);
 	for (int i = 0; i < (int)buttons_.size(); ++i) {
 		buttons_[i].draw(ctx.ui, i == focused_);
 	}

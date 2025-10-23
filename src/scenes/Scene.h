@@ -1,15 +1,15 @@
 #pragma once
 #include <functional>
 #include <memory>
-
-struct SceneContext;
+#include "SceneContext.h"
 
 enum class TransitionType
 {
 	None,
 	Push,
 	Pop,
-	Swap
+	Swap,
+	Exit
 };
 
 struct Transition
@@ -19,6 +19,8 @@ struct Transition
 	std::function<std::unique_ptr<class Scene>()> factory;
 
 	static Transition None() { return {}; }
+
+	static Transition Exit() { return { TransitionType::Exit, {} }; }
 
 	template <class F> 
 	static Transition Push(F&& factory)
@@ -49,7 +51,7 @@ public:
 
 	virtual void handleInput(SceneContext&) = 0;
 
-	virtual Transition update() = 0;
+	virtual Transition update(SceneContext&, float) = 0;
 	virtual void draw(SceneContext&) const = 0;
 
 	virtual bool blocksUpdate() const { return true; }

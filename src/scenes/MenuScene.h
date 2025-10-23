@@ -1,16 +1,19 @@
 #pragma once
 #include <vector>
-#include "Scene.h"
-#include "SceneContext.h"
+#include "TypedScene.h"
+#include "MenuSceneContext.h"
 #include "../config/Button.h"
 #include "../config/MenuInput.h"
 
-class MenuScene : public Scene {
+class MenuScene : public TypedScene<MenuScheneContext> {
 public:
-	void onEnter(SceneContext& ctx) override;
-	void handleInput(SceneContext& ctx) override;
-	Transition update() override;
-	void draw(SceneContext& ctx) const override;
+	using TypedScene::TypedScene;
+
+	void onEnterT(MenuScheneContext& ctx) override;
+	void onExitT(MenuScheneContext& ctx) override {};
+	void handleInputT(MenuScheneContext& ctx) override;
+	void drawT(MenuScheneContext& ctx) const override;
+	Transition updateT(MenuScheneContext& ctx, float dt) override;
 
 private:
 	std::vector<Button> buttons_;

@@ -7,8 +7,4 @@ struct SceneContext {
 	int screenW{ 1280 };
 	int screenH{ 720 };
 
-	// сервисы
-	UiMenuTheme ui{};
-	MenuInput   input{};
-
 };

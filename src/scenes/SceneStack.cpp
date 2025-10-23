@@ -10,8 +10,12 @@ void SceneStack::update(float deltaTime) {
 	if (stack_.empty()) return;
 
 	for (int i = static_cast<int>(stack_.size()) - 1; i >= 0; --i) {
-		Transition t = stack_[i]->update();
-		if (t.type != TransitionType::None) {
+		Transition t = stack_[i]->update(ctx_, deltaTime);
+		if (t.type == TransitionType::Exit) {
+			wantsExit_ = true;
+			return;
+		}
+		else if (t.type != TransitionType::None) {
 			apply(t);
 			return;
 		}
@@ -20,6 +24,7 @@ void SceneStack::update(float deltaTime) {
 }
 
 void SceneStack::draw() const {
+	if (wantsExit_) return;
 	if (stack_.empty()) return;
 
 	int first = 0;
