@@ -17,7 +17,8 @@ void MenuInput::poll() {
 	pBack = IsKeyPressed(KEY_ESCAPE);
 }
 
-bool MenuInput::pressed(Action a) const {
+bool MenuInput::pressed(Action a) const 
+{
 	switch (a) {
 	case Action::Up: return pUp; 
 	case Action::Down: return pDown;
@@ -28,7 +29,8 @@ bool MenuInput::pressed(Action a) const {
 	default: return false;
 	}
 }
-bool MenuInput::down(Action a) const {
+bool MenuInput::down(Action a) const 
+{
 	switch (a) {
 	case Action::Up: return dUp; 
 	case Action::Down: return dDown;

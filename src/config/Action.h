@@ -6,5 +6,8 @@ enum class Action {
 	Right,
 	Confirm,
 	Back,
+	Fire,
+	Run,
+	Pause,
 	None
 };
