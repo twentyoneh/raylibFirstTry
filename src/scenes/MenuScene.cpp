@@ -1,6 +1,5 @@
 #include "MenuScene.h"
 #include <raylib.h>
-// #include "PlayScene.hpp" // когда появится
 
 void MenuScene::onEnterT(MenuScheneContext& ctx) {
 	float w = ctx.ui.btnW, h = ctx.ui.btnH, s = ctx.ui.spacing;
@@ -29,8 +28,7 @@ void MenuScene::handleInputT(MenuScheneContext& ctx) {
 
 Transition MenuScene::updateT(MenuScheneContext& ctx, float dt) {
 	if (wantStart_) {
-		 //return Transition::Swap([]{ return std::make_unique<PlayScene>(); });
-		return Transition::None(); // пока PlayScene нет
+		return Transition::Swap([]{ return std::make_unique<PlayScene>(); });
 	}
 	if (wantOptions_) {
 		// return Transition::Push([]{ return std::make_unique<OptionsScene>(); });

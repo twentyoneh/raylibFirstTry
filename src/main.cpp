@@ -2,7 +2,6 @@
 #include "raylib.h"
 #include <iostream>
 #include "scenes/MenuScene.h"
-#include "scenes/SceneContext.h"
 #include "scenes/SceneStack.h"
 #include "scenes/MenuSceneContext.h"
 
