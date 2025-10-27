@@ -3,10 +3,10 @@
 // то что должно прогружатьс€ в начале сцены игры
 void PlayScene::onEnterT(PlaySceneContext& ctx)
 {
-	/*cam_.target = player_.getPosition();
+	cam_.target = player_.getPosition();
 	cam_.offset = { ctx.screenW * 0.5f, ctx.screenH * 0.5f };
 	cam_.rotation = 0.0f;
-	cam_.zoom = 1.0f;*/
+	cam_.zoom = 1.0f;
 }
 
 void PlayScene::onExitT(PlaySceneContext& ctx)
@@ -65,14 +65,14 @@ void PlayScene::drawT(PlaySceneContext& ctx) const
 	for (int x = -2000; x <= 2000; x += 64) DrawLine(x, -2000, x, 2000, Color{ 40,40,48,255 });
 	for (int y = -2000; y <= 2000; y += 64) DrawLine(-2000, y, 2000, y, Color{ 40,40,48,255 });
 
-	const_cast<Player&>(player_).Draw(); // твой Player::Draw() без const
-
+	//const_cast<Player&>(player_).Draw(); // твой Player::Draw() без const
+	player_.Draw();
 	/*for (auto& b : bullets_) {
 		DrawCircleV(b.pos, 4.f, YELLOW);
 	}*/
 
 	EndMode2D();
 
-	DrawText("WASD Ч ходьба, Shift Ч бег, Ћ ћ Ч выстрел, Esc Ч назад",
-		20, ctx.screenH - 36, 18, RAYWHITE);
+	//DrawText("WASD Ч ходьба, Shift Ч бег, Ћ ћ Ч выстрел, Esc Ч назад",
+		//20, ctx.screenH - 36, 18, RAYWHITE);
 }

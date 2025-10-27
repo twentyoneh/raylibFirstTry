@@ -19,7 +19,7 @@ class Player : public GameActor
 		void Shot() override;
 
 		void Update(float deltaTime) override;
-		void Draw() override;
+		void Draw() const override;
 
 		std::string getName() const { return name; };
 	private:
