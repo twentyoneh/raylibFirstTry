@@ -7,7 +7,9 @@
 class PlayScene : public TypedScene<PlaySceneContext>
 {
 public:
-	using TypedScene::TypedScene;
+	explicit PlayScene(PlaySceneContext& ctx) : TypedScene(ctx) {}
+	PlayScene() = delete;  // запретить PlayScene() без аргументов
+	//using TypedScene::TypedScene;
 
 	void onEnterT(PlaySceneContext& ctx) override;
 	void onExitT(PlaySceneContext& ctx) override;

@@ -28,7 +28,11 @@ void MenuScene::handleInputT(MenuScheneContext& ctx) {
 
 Transition MenuScene::updateT(MenuScheneContext& ctx, float dt) {
 	if (wantStart_) {
-		return Transition::Swap([]{ return std::make_unique<PlayScene>(); });
+		return Transition::Swap([&ctx]{
+			PlaySceneContext* playCtx = new PlaySceneContext{};
+			//*static_cast<SceneContext*>(playCtx) = ctx;
+			return std::unique_ptr<Scene>(new PlayScene(*playCtx));
+			});
 	}
 	if (wantOptions_) {
 		// return Transition::Push([]{ return std::make_unique<OptionsScene>(); });
