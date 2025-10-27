@@ -45,7 +45,7 @@ Transition MenuScene::updateT(MenuScheneContext& ctx, float dt) {
 }
 
 void MenuScene::drawT(MenuScheneContext& ctx) const {
-	if(wantExit_) return
+	if (wantExit_) return;
 	DrawText("TOP-DOWN SHOOTER", 40, 40, ctx.ui.titleSize, ctx.ui.title);
 	ClearBackground(ctx.ui.bg);
 	for (int i = 0; i < (int)buttons_.size(); ++i) {

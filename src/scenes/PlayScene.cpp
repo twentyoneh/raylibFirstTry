@@ -19,16 +19,16 @@ void PlayScene::onExitT(PlaySceneContext& ctx)
 void PlayScene::handleInputT(PlaySceneContext& ctx)
 {
 	ctx.input.poll();
-	if (ctx.input.pressed(Action::Down)) {
+	if (ctx.input.down(Action::Down)) {
 		player_.SMove();
 	}
-	if (ctx.input.pressed(Action::Up)) {
+	if (ctx.input.down(Action::Up)) {
 		player_.WMove();
 	}
-	if (ctx.input.pressed(Action::Left)) {
+	if (ctx.input.down(Action::Left)) {
 		player_.AMove();
 	}
-	if (ctx.input.pressed(Action::Right)) {
+	if (ctx.input.down(Action::Right)) {
 		player_.DMove();
 	}
 	if (ctx.input.pressed(Action::Fire)) {

@@ -36,6 +36,7 @@ void Player::Update(float deltaTime)
 
 void Player::Draw() const
 {
+
 	DrawRectangle(x - 20, y - 20, 40, 40, BLUE);
 }
 
