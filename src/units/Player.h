@@ -22,8 +22,10 @@ class Player : public GameActor
 		void Draw() const override;
 
 		std::string getName() const { return name; };
+		void setSpeed(int speed);
 	private:
 		std::string name;
 		float health;
 		int speed;
+		Texture2D texture;
 };

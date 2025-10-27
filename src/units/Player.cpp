@@ -1,11 +1,14 @@
 #include "Player.h"
 #include <raymath.h>
+#include <filesystem>
+
 
 
 Player::Player(const std::string& name, float x, float y)
 	: GameActor(x, y), name(name), health(100), speed(10)
 {
-	
+	std::cout << "fileDirectory: " << std::filesystem::current_path() << std::endl;
+	texture = LoadTexture("resources/textures/units/player/Player0001.png");
 }
 
 Player::~Player()
@@ -36,7 +39,13 @@ void Player::Update(float deltaTime)
 
 void Player::Draw() const
 {
+	DrawTexture(texture, 32, 32, Color{ 18,18,22,255 });
+	//DrawRectangleLines()
+	//DrawRectangle(x - 20, y - 20, 40, 40, BLUE);
+}
 
-	DrawRectangle(x - 20, y - 20, 40, 40, BLUE);
+void Player::setSpeed(int speed)
+{
+	this->speed = speed;
 }
 
