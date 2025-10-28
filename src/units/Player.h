@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <raymath.h>
 
 class Player : public GameActor
 {

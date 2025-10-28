@@ -6,7 +6,7 @@ void PlayScene::onEnterT(PlaySceneContext& ctx)
 	cam_.target = player_.getPosition();
 	cam_.offset = { ctx.screenW * 0.5f, ctx.screenH * 0.5f };
 	cam_.rotation = 0.0f;
-	cam_.zoom = 1.0f;
+	cam_.zoom = 3.0f;
 }
 
 void PlayScene::onExitT(PlaySceneContext& ctx)
