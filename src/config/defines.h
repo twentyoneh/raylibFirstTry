@@ -1,0 +1,1 @@
+#define PATH_RESOURCE_TEXTURE "../../resources/textures"

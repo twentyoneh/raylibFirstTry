@@ -1,25 +1,35 @@
 
 #include "raylib.h"
-
-
-const int screenWidth = 800;
-const int screenHeight = 450;
+#include <iostream>
+#include "scenes/MenuScene.h"
+#include "scenes/SceneStack.h"
+#include "scenes/MenuSceneContext.h"
 
 int main(void)
 {
-	const int screenWidth = 800;
-	const int screenHeight = 450;
-
-	InitWindow(screenWidth, screenHeight, "raylib [core] example - input mouse");
-
+	InitWindow(1280, 720, "Scenes + Menu");
 	SetTargetFPS(60);
 
-	// Main game loop
-	while (!WindowShouldClose()) 
-	{
-		
+	MenuScheneContext ctx;
+	ctx.screenW = GetScreenWidth();
+	ctx.screenH = GetScreenHeight();
+	
+
+	SceneStack stack(ctx);
+	stack.push(std::make_unique<MenuScene>(ctx));
+
+	while (!WindowShouldClose()) {
+		float dt = GetFrameTime();
+
+		stack.handleInput();
+		stack.update(dt);
+
+		if (stack.wantsExit()) break;
+
+		BeginDrawing();
+		stack.draw();
+		EndDrawing();
 	}
 	CloseWindow();
-
 	return 0;
 }
