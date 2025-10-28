@@ -30,7 +30,6 @@ Transition MenuScene::updateT(MenuScheneContext& ctx, float dt) {
 	if (wantStart_) {
 		return Transition::Swap([&ctx]{
 			PlaySceneContext* playCtx = new PlaySceneContext{};
-			//*static_cast<SceneContext*>(playCtx) = ctx;
 			return std::unique_ptr<Scene>(new PlayScene(*playCtx));
 			});
 	}

@@ -3,12 +3,12 @@
 #include "TypedScene.h"
 #include "PlaySceneContext.h"
 #include "../units/Player.h"
-//#include "../units/Bullet.h"
+#include "../units/Bullet.h"
 
 class PlayScene : public TypedScene<PlaySceneContext>
 {
 public:
-	using TypedScene::TypedScene;
+	PlayScene(PlaySceneContext& ctx) : TypedScene<PlaySceneContext>(ctx), context(ctx) {}
 
 	void onEnterT(PlaySceneContext& ctx) override;
 	void onExitT(PlaySceneContext& ctx) override;
@@ -17,16 +17,14 @@ public:
 	Transition updateT(PlaySceneContext& ctx, float dt) override;
 
 private:
+	PlaySceneContext& context;
 	Player player_{ "Hero", 200.f, 200.f };
-	//std::vector<Bullet> bullets_;
 	Camera2D cam_{};
+	bool wantExit_{ false };
 
-	// настроечки
-	float moveSpeed_ = 220.f;
-	float runMul_ = 1.5f;
-	float bulletSpeed_ = 520.f;
+	std::vector<Bullet> bullets_;
 
-	bool wantExit_ = false;
-	//void shoot_(const PlaySceneContext& ctx);
-	//void updateBullets_(float dt, const PlaySceneContext& ctx);
+	void spawnBullet_(Vector2 origin, Vector2 dir, ProjectileKind kind);
+	void updateBullets_(float dt);
+	void drawBullets_() const;
 };
