@@ -2,36 +2,19 @@
 #include "raylib.h"
 #include <unordered_map>
 #include <string>
+#include <stdexcept>
 
 
 class TextureCache {
 public:
-
-	~TextureCache() { clear(); }
-
-    const Texture2D& get(const std::string& key, const std::string& path) {
-        auto it = map_.find(key);
-        if (it != map_.end()) return it->second;
-        Texture2D tex = LoadTexture(path.c_str());
-        map_.emplace(key, tex);
-        return map_.at(key);
-    }
-
-    // если где-то нужно явно освободить одну
-    void unload(const std::string& key) {
-        auto it = map_.find(key);
-        if (it != map_.end()) {
-            UnloadTexture(it->second);
-            map_.erase(it);
-        }
-    }
+    // Явная инициализация/деинициализация
+    void load(const std::string& id, const std::string& filePath, bool setFilterBilinear = true);
+    bool has(const std::string& id) const;
+    const Texture2D& get(const std::string& id) const;
+    Texture2D& get(const std::string& id);
+    void unload(const std::string& id);
+    void unloadAll();
 
 private:
-
-    void clear() {
-        for (auto& [k, t] : map_) UnloadTexture(t);
-        map_.clear();
-    }
-
-    std::unordered_map<std::string, Texture2D> map_;
+    std::unordered_map<std::string, Texture2D> cache_;
 };
