@@ -10,6 +10,14 @@ void Sprite::setTexture(TextureCache& cache, const std::string& texId) {
     if (srcRect_.height < 0) srcRect_.height = -srcRect_.height;
 }
 
+void Sprite::setTexture(const Texture2D& t)
+{
+    tex_ = &t;
+    srcRect_ = { 0, 0, (float)t.width, (float)t.height };
+    if (srcRect_.width < 0) srcRect_.width = -srcRect_.width;
+    if (srcRect_.height < 0) srcRect_.height = -srcRect_.height;
+}
+
 void Sprite::setSourceRect(Rectangle src) {
     srcRect_ = src;
 }

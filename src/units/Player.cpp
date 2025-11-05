@@ -6,12 +6,18 @@ Player::Player(const std::string& name, float x, float y)
 	: GameActor(x, y), name(name), health(100), speed(5)
 {
 	//std::cout << "fileDirectory: " << std::filesystem::current_path() << std::endl;
-	texture = LoadTexture("resources/textures/units/player/Player0001.png");
+	//texture = LoadTexture("resources/textures/units/player/Player0001.png");
+	
 }
 
 Player::~Player()
 {
 
+}
+
+void Player::init(TextureCache& cache)
+{
+	sprite_.setTexture(cache, "player_idle");
 }
 
 void Player::AMove() { x -= speed; }
@@ -32,13 +38,15 @@ void Player::Shot()
 
 void Player::Update(float deltaTime)
 {
-
+	const auto pos = getPosition();
+	sprite_.setPosition(pos);
 }
 
 void Player::Draw() const
 {
-	DrawTexture(texture, x, y, WHITE);
-	DrawRectangleLines(x, y, texture.width, texture.height, LIME);
+	//DrawTexture(texture, x, y, WHITE);
+	sprite_.draw();
+	DrawRectangleLines(x, y, sprite_.sourceRect().width, sprite_.sourceRect().height, LIME);
 	//DrawRectangleLines()
 	//DrawRectangle(x - 20, y - 20, 40, 40, BLUE);
 }

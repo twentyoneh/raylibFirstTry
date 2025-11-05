@@ -7,6 +7,10 @@ void PlayScene::onEnterT(PlaySceneContext& ctx)
 	cam_.offset = { ctx.screenW * 0.5f, ctx.screenH * 0.5f };
 	cam_.rotation = 0.0f;
 	cam_.zoom = 3.0f;
+	
+	//загрузка всех текстур:
+	ctx.textures.load("player_idle", "resources/textures/units/player/Player0001.png");
+	player_.init(ctx.textures);
 }
 
 void PlayScene::onExitT(PlaySceneContext& ctx)

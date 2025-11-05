@@ -9,6 +9,7 @@ class Sprite
 public:
 	Sprite() = default;
 	void setTexture(TextureCache& cache, const std::string& texId);
+    void setTexture(const Texture2D& t);
     void setSourceRect(Rectangle src);
 
     void setPosition(Vector2 pos) { position_ = pos; }

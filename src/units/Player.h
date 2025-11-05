@@ -5,12 +5,15 @@
 #include <iostream>
 #include <vector>
 #include <raymath.h>
+#include "../gfx/Sprite.h"
+#include "../gfx/TextureCache.h"
 
 class Player : public GameActor
 {
 	public:
 		Player(const std::string& name, float x = 0.0f, float y = 0.0f);
 		~Player() override;
+		void init(TextureCache& cache);
 
 		void AMove() override;
 		void SMove() override;
@@ -28,5 +31,6 @@ class Player : public GameActor
 		std::string name;
 		float health;
 		int speed;
-		Texture2D texture;
+		//Texture2D texture;
+		Sprite sprite_;
 };
