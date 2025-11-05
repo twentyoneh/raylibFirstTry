@@ -55,6 +55,7 @@ Transition PlayScene::updateT(PlaySceneContext& ctx, float dt)
 	Vector2 target = player_.getPosition();
 	cam_.target.x += (target.x - cam_.target.x) * (1.0f - powf(0.001f, dt)); // сглаживание
 	cam_.target.y += (target.y - cam_.target.y) * (1.0f - powf(0.001f, dt));
+	player_.Update(dt);
 
 	if (wantExit_) {
 		return Transition::Exit();
