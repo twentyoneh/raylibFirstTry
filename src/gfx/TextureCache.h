@@ -17,7 +17,7 @@ public:
         return map_.at(key);
     }
 
-    // если где-то нужно явно освободить одну
+
     void unload(const std::string& key) {
         auto it = map_.find(key);
         if (it != map_.end()) {

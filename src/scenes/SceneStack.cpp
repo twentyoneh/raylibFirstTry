@@ -1,11 +1,9 @@
-#include "SceneStack.h"
+п»ї#include "SceneStack.h"
 
-// вызываем InputHandler для текущей сцены
 void SceneStack::handleInput() {
 	if (auto* s = top()) s->handleInput(ctx_);
 }
 
-// обновляем сцены сверху вниз, пока не встретим блокирующую обновление сцену
 void SceneStack::update(float deltaTime) {
 	if (stack_.empty()) return;
 
@@ -36,7 +34,6 @@ void SceneStack::draw() const {
 	}
 }
 
-// добавление в стек Сцены
 void SceneStack::push(std::unique_ptr<Scene> s) {
 	s->onEnter(ctx_);
 	stack_.push_back(std::move(s));

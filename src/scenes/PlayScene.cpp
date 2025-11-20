@@ -1,6 +1,5 @@
 #include "PlayScene.h"
 
-// то что должно прогружатьс€ в начале сцены игры
 void PlayScene::onEnterT(PlaySceneContext& ctx)
 {
 	cam_.target = player_.getPosition();
@@ -49,7 +48,7 @@ Transition PlayScene::updateT(PlaySceneContext& ctx, float dt)
 	updateBullets_(dt);
 
 	Vector2 target = player_.getPosition();
-	cam_.target.x += (target.x - cam_.target.x) * (1.0f - powf(0.001f, dt)); // сглаживание
+	cam_.target.x += (target.x - cam_.target.x) * (1.0f - powf(0.001f, dt));
 	cam_.target.y += (target.y - cam_.target.y) * (1.0f - powf(0.001f, dt));
 
 	if (wantExit_) {
@@ -70,9 +69,6 @@ void PlayScene::drawT(PlaySceneContext& ctx) const
 	drawBullets_();
 
 	EndMode2D();
-
-	//DrawText("WASD Ч ходьба, Shift Ч бег, Ћ ћ Ч выстрел, Esc Ч назад",
-		//20, ctx.screenH - 36, 18, RAYWHITE);
 }
 
 
@@ -86,7 +82,6 @@ void PlayScene::updateBullets_(float dt) {
 		b.pos.y += b.vel.y * dt;
 		b.ttl -= dt;
 		if (b.ttl <= 0.f) b.active = false;
-		// TODO: столкновени€/границы мира/ущерб
 	}
 	bullets_.erase(std::remove_if(bullets_.begin(), bullets_.end(),
 		[](const Bullet& x) { return !x.active; }), bullets_.end());

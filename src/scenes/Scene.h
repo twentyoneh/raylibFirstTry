@@ -45,7 +45,6 @@ class Scene
 public:
 	virtual ~Scene() = default;
 	
-	// Иницилизация
 	virtual void onEnter(SceneContext&) {}
 	virtual void onExit(SceneContext&) {}
 

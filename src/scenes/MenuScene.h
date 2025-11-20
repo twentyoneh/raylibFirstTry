@@ -3,8 +3,6 @@
 #include "TypedScene.h"
 #include "MenuSceneContext.h"
 #include "../config/Button.h"
-#include "../config/MenuInput.h"
-#include "PlayScene.h"
 
 class MenuScene : public TypedScene<MenuScheneContext> {
 public:

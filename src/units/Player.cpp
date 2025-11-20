@@ -39,8 +39,6 @@ void Player::Draw() const
 {
 	DrawTexture(texture, x, y, WHITE);
 	DrawRectangleLines(x, y, texture.width, texture.height, LIME);
-	//DrawRectangleLines()
-	//DrawRectangle(x - 20, y - 20, 40, 40, BLUE);
 }
 
 void Player::setSpeed(int speed)

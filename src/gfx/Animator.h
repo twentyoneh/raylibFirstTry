@@ -5,7 +5,7 @@
 #include <vector>
 
 struct Animation {
-    std::vector<int> frames;   // индексы в SpriteSheet::frames
+    std::vector<int> frames;
     float fps = 8.0f;
     bool loop = true;
 };

@@ -7,9 +7,8 @@
 class BulletFactory {
 public:
     BulletFactory() {
-        // Значения по умолчанию
         configs_[ProjectileKind::BasicBullet] = BulletConfig{
-            520.f, 1.5f, 4.f, 1, 0 };
+          520.f, 1.5f, 4.f, 1, 0 };
         configs_[ProjectileKind::KnightBasic] = BulletConfig{
             520.f, 1.5f, 4.f, 1, 0 };
         configs_[ProjectileKind::Heavy] = BulletConfig{
@@ -25,7 +24,6 @@ public:
         return it != configs_.end() ? it->second : configs_.begin()->second;
     }
 
-    // Создание одной пули
     Bullet make(Vector2 origin, Vector2 dir, ProjectileKind k) const {
         Bullet b{};
         b.kind = k;
