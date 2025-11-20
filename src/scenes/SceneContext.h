@@ -1,9 +1,9 @@
-#pragma once
+п»ї#pragma once
 #include "../config/UiMenuTheme.h"
 #include "../config/MenuInput.h"
 
 struct SceneContext {
-	// окно / геометрия
+	// Р‘Р°Р·РѕРІС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё СЃС†РµРЅС‹
 	int screenW{ 1280 };
 	int screenH{ 720 };
 
