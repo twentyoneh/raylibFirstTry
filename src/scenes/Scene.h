@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <functional>
 #include <memory>
 #include "SceneContext.h"
@@ -45,6 +45,7 @@ class Scene
 public:
 	virtual ~Scene() = default;
 	
+	// Иницилизация данных внутри сцены
 	virtual void onEnter(SceneContext&) {}
 	virtual void onExit(SceneContext&) {}
 
@@ -53,6 +54,7 @@ public:
 	virtual Transition update(SceneContext&, float) = 0;
 	virtual void draw(SceneContext&) const = 0;
 
+	// Блокирование объектов внутри сцены 
 	virtual bool blocksUpdate() const { return true; }
 	virtual bool blocksDraw()   const { return true; }
 };

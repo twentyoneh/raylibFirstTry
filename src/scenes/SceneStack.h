@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <vector>
 #include <memory>
 #include "Scene.h"
@@ -12,10 +12,12 @@ public:
 	void update(float deltaTime);
 	void draw() const;
 
+	// функции для изменения текущей сцены
 	void push(std::unique_ptr<Scene> s);
 	void pop();
 	void swap(std::unique_ptr<Scene> s);
 
+	// вернуть текущую сцену
 	Scene* top() { return stack_.empty() ? nullptr : stack_.back().get(); }
 	bool wantsExit() const { return wantsExit_; }
 
