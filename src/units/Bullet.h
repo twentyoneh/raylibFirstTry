@@ -14,7 +14,8 @@ enum class ProjectileKind : uint8_t {
     KnightBasic,
     Heavy,
     Fast,
-    ShotgunPellet
+    ShotgunPellet,
+    EnemyShot        // снаряд врага-стрелка; рисуется красным, бьёт игрока
 };
 
 struct Bullet {

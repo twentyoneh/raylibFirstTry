@@ -185,31 +185,43 @@ void PlayScene::updatePlayer_(float dt)
     }
 }
 
-void PlayScene::updateBullets_(float dt)
-{
-    for (auto& b : bullets_) if (b.active) {
+// Обновление одного списка пуль (см. updateBullets_).
+// Объявлено перед использованием, чтобы не зависеть от порядка методов.
+static void updateBulletList_(std::vector<Bullet>& list, float dt) {
+    for (auto& b : list) if (b.active) {
         b.pos.x += b.vel.x * dt;
         b.pos.y += b.vel.y * dt;
         b.ttl   -= dt;
         if (b.ttl <= 0.f) b.active = false;
     }
-    bullets_.erase(
-        std::remove_if(bullets_.begin(), bullets_.end(),
+    list.erase(
+        std::remove_if(list.begin(), list.end(),
             [](const Bullet& b){ return !b.active; }),
-        bullets_.end());
+        list.end());
+}
+
+void PlayScene::updateBullets_(float dt)
+{
+    updateBulletList_(bullets_, dt);
+    updateBulletList_(enemyBullets_, dt);
 }
 
 void PlayScene::updateEnemies_(float dt)
 {
-    for (auto& e : enemies_) if (e.alive()) e.chase(player_.position(), dt);
+    // Собираем "контекст тика" — общий для всех врагов в этом кадре.
+    EnemyTick tick;
+    tick.playerPos    = player_.position();
+    tick.enemyBullets = &enemyBullets_;
+    tick.factory      = &ownedCtx_->bullets;
 
-    // Удаляем мёртвых — но сначала собираем XP и шанс дропа оружия.
-    // (Это могло бы быть в resolveCollisions_, но удобнее в одном месте.)
+    for (auto& e : enemies_) if (e.alive()) e.tick(dt, tick);
+
     enemies_.erase(
         std::remove_if(enemies_.begin(), enemies_.end(),
             [](const Enemy& e){ return !e.alive(); }),
         enemies_.end());
 }
+
 
 void PlayScene::updatePickups_(float /*dt*/)
 {
@@ -274,8 +286,20 @@ void PlayScene::resolveCollisions_()
         float rr = player_.radius() + e.radius();
         if (Vector2DistanceSqr(player_.position(), e.position()) <= rr * rr) {
             player_.damage(e.touchDamage());
-            // Босс не умирает от тарана; обычный — да (можно заменить на knockback).
-            if (!e.isBoss()) e.kill();
+            // Hp=1 мобы и так умрут от тарана при kill(); Tank/Shooter/Boss выживают.
+            if (e.kind() == EnemyKind::Chaser || e.kind() == EnemyKind::Runner) {
+                e.kill();
+            }
+        }
+    }
+
+    // --- Вражеская пуля × Игрок ---
+    for (auto& b : enemyBullets_) {
+        if (!b.active || !player_.alive()) continue;
+        float rr = b.radius + player_.radius();
+        if (Vector2DistanceSqr(b.pos, player_.position()) <= rr * rr) {
+            player_.damage(b.damage);
+            b.active = false;
         }
     }
 
@@ -299,12 +323,12 @@ void PlayScene::maybeSpawnEnemy_(float /*dt*/)
         player_.position().x + cosf(angle) * dist,
         player_.position().y + sinf(angle) * dist
     };
-    Enemy::Stats st = Enemy::normalStats();
-    // С волной враги чуть быстрее (+5 пикс/сек за волну сверх первой).
+    Enemy::Stats st = Enemy::randomForWave(wave_.wave());
+    // С волной все враги чуть быстрее: +5 пикс/сек за каждую волну сверх первой.
     st.speed += 5.f * (wave_.wave() - 1);
     enemies_.emplace_back(pos, st);
-    LOG_T("SCENE", "enemy spawned at (%.0f, %.0f); total=%d",
-          pos.x, pos.y, (int)enemies_.size());
+    LOG_T("SCENE", "enemy spawned kind=%d at (%.0f, %.0f); total=%d",
+          (int)st.kind, pos.x, pos.y, (int)enemies_.size());
 }
 
 void PlayScene::maybeSpawnBoss_()
@@ -373,8 +397,14 @@ void PlayScene::drawWorld_() const
     // Визуал способностей (поверх врагов, но за пулями).
     for (const auto& a : player_.abilities()) if (a) a->draw(player_);
 
+    // Игроцкие пули — жёлтые.
     for (const auto& b : bullets_) if (b.active)
         DrawCircleV(b.pos, b.radius, YELLOW);
+    // Вражеские — красные с тёмной обводкой (визуально отличить от пикапов).
+    for (const auto& b : enemyBullets_) if (b.active) {
+        DrawCircleV(b.pos, b.radius, RED);
+        DrawCircleLines((int)b.pos.x, (int)b.pos.y, b.radius, MAROON);
+    }
 }
 
 void PlayScene::drawHud_(const PlaySceneContext& ctx) const

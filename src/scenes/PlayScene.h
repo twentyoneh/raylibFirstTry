@@ -71,7 +71,8 @@ public:
     float gameTimeMul() const { return gameTimeMul_; }
 private:
 
-    std::vector<Bullet>                  bullets_;
+    std::vector<Bullet>                  bullets_;       // пули игрока
+    std::vector<Bullet>                  enemyBullets_;  // пули врагов (Shooter)
     std::vector<Enemy>                   enemies_;
     std::vector<std::unique_ptr<Pickup>> pickups_;
 
