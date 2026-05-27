@@ -21,6 +21,7 @@
 #include "../units/Bullet.h"
 #include "../pickups/Pickup.h"
 #include "../waves/WaveManager.h"
+#include "../util/SpatialGrid.h"
 #include <memory>
 #include <vector>
 
@@ -64,6 +65,10 @@ private:
     std::vector<Bullet>                  bullets_;
     std::vector<Enemy>                   enemies_;
     std::vector<std::unique_ptr<Pickup>> pickups_;
+
+    // Spatial-сетка для ускорения коллизий bullet × enemy.
+    // Перестраивается каждый кадр перед resolveCollisions_ (см. ребилд там же).
+    SpatialGrid enemyGrid_{ 64.f };
 
     void updatePlayer_(float dt);
     void updateBullets_(float dt);

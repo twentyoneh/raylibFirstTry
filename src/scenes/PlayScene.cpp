@@ -174,35 +174,42 @@ void PlayScene::updateAbilities_(float dt)
 
 void PlayScene::resolveCollisions_()
 {
-    // --- Пуля × Враг ---
+    // Перестраиваем spatial-сетку по живым врагам. O(N).
+    enemyGrid_.clear();
+    for (int i = 0; i < (int)enemies_.size(); ++i) {
+        if (enemies_[i].alive()) enemyGrid_.insert(i, enemies_[i].position());
+    }
+
+    // --- Пуля × Враг (через сетку: O(bullets * average_neighbors)) ---
     for (auto& b : bullets_) {
         if (!b.active) continue;
-        for (auto& e : enemies_) {
-            if (!e.alive()) continue;
+        bool hit = false;
+        enemyGrid_.queryNeighborhood(b.pos, [&](int idx){
+            if (hit) return;            // пуля уже использовалась — пропускаем
+            auto& e = enemies_[idx];
+            if (!e.alive()) return;
             float rr = b.radius + e.radius();
-            if (Vector2DistanceSqr(b.pos, e.position()) <= rr * rr) {
-                e.damage(b.damage);
-                b.active = false;
-                if (!e.alive()) {
-                    // ---- XP + score ----
-                    int xpGain = e.xpValue();
-                    score_ += e.isBoss() ? 100 : 10;
-                    int ups = player_.gainXp(xpGain);
-                    pendingUpgrades_ += ups;
+            if (Vector2DistanceSqr(b.pos, e.position()) > rr * rr) return;
 
-                    // ---- weapon drop ----
-                    float r = (float)GetRandomValue(0, 100000) / 100000.f;
-                    if (r < e.weaponDropChance()) {
-                        if (auto p = ownedCtx_->dropTable.roll(wave_.wave(), e.position())) {
-                            pickups_.push_back(std::move(p));
-                        }
+            e.damage(b.damage);
+            b.active = false;
+            hit = true;
+
+            if (!e.alive()) {
+                int xpGain = e.xpValue();
+                score_ += e.isBoss() ? 100 : 10;
+                int ups = player_.gainXp(xpGain);
+                pendingUpgrades_ += ups;
+
+                float r = (float)GetRandomValue(0, 100000) / 100000.f;
+                if (r < e.weaponDropChance()) {
+                    if (auto p = ownedCtx_->dropTable.roll(wave_.wave(), e.position())) {
+                        pickups_.push_back(std::move(p));
                     }
-
-                    if (e.isBoss()) wave_.notifyBossKilled();
                 }
-                break;
+                if (e.isBoss()) wave_.notifyBossKilled();
             }
-        }
+        });
     }
 
     // --- Игрок × Враг (контактный урон) ---
