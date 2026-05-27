@@ -358,3 +358,17 @@ cd build && ./premake5 gmake && cd ..
 make config=debug_x64        # ~1-2 мин первый раз (компилирует raylib)
 ./bin/Debug/raylibFirstTry
 ```
+
+## 13. Тесты
+
+Чистые функции (XpTable, BuffStack, BulletFactory) покрыты assert-тестами.
+
+```bash
+build/build-tests.sh
+```
+
+Скрипту нужна уже собранная `bin/Debug/libraylib.a` (т.е. сначала
+`make config=debug_x64`). Тесты не открывают окно, не зависят от GPU.
+
+Добавить тест: открой `tests/tests.cpp`, напиши `static void test_xxx()`
+с `assert(...)`, добавь `TEST(test_xxx);` в `main()`. Никакого фреймворка.
