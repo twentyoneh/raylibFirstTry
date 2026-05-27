@@ -2,7 +2,9 @@
 #include "../util/Log.h"
 #include "../Paths.h"
 #include "../progression/XpTable.h"
-#include "../abilities/Ability.h"   // полный тип для uptr-деструкции
+#include "../abilities/Ability.h"   // полный тип для uptr<Ability> деструкции
+#include "../weapons/Weapon.h"      // полный тип для uptr<Weapon>
+#include "../gfx/TextureCache.h"    // используется в конструкторе
 #include <algorithm>
 
 Player::Player(TextureCache& textures, const std::string& name, Vector2 startPos)

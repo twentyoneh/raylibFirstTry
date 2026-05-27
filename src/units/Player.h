@@ -15,16 +15,19 @@
 
 #include "GameActor.h"
 #include "raylib.h"
-#include "../gfx/TextureCache.h"
 #include "../gfx/Animator.h"
 #include "../gfx/SpriteSheet.h"
-#include "../weapons/Weapon.h"
 #include "BuffStack.h"
 #include <string>
 #include <memory>
 #include <vector>
 
-class Ability;   // forward — реализация подтянет abilities/Ability.h в Player.cpp
+// Forward declarations: полные типы нужны только в Player.cpp, поэтому
+// заголовки этих модулей не тянем в Player.h. Каждый, кто включает
+// Player.h, экономит на пре-процессинге их транзитивных зависимостей.
+class Ability;
+class Weapon;
+class TextureCache;
 
 class Player : public GameActor
 {
