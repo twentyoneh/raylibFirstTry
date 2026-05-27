@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "../util/Log.h"
+#include "../Paths.h"
 #include "../progression/XpTable.h"
 #include "../abilities/Ability.h"   // полный тип для uptr-деструкции
 #include <algorithm>
@@ -7,7 +8,7 @@
 Player::Player(TextureCache& textures, const std::string& name, Vector2 startPos)
     : GameActor(startPos.x, startPos.y), name_(name)
 {
-    tex_ = &textures.get("player", "resources/textures/units/player/Player0001.png");
+    tex_ = &textures.get("player", paths::tex::player);
 
     // Один кадр — место под будущий sprite-sheet.
     sheet_.tex = tex_;
