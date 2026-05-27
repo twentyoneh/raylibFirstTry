@@ -28,10 +28,18 @@ void MenuScene::handleInputT(MenuScheneContext& ctx) {
 
 Transition MenuScene::updateT(MenuScheneContext& ctx, float dt) {
 	if (wantStart_) {
-		return Transition::Swap([&ctx]{
-			PlaySceneContext* playCtx = new PlaySceneContext{};
-			return std::unique_ptr<Scene>(new PlayScene(*playCtx));
-			});
+		// PlayScene владеет своим PlaySceneContext через unique_ptr.
+		// Передаём указатель на menu-ctx, чтобы можно было вернуться сюда
+		// при смерти игрока или нажатии Esc (см. PlayScene::updateT).
+		MenuScheneContext* menuCtxPtr = &ctx;
+		wantStart_ = false;   // сбрасываем — Swap может быть и из MenuScene при возврате
+		return Transition::Swap([menuCtxPtr]{
+			auto playCtx = std::make_unique<PlaySceneContext>();
+			playCtx->screenW = GetScreenWidth();
+			playCtx->screenH = GetScreenHeight();
+			playCtx->menuCtx = menuCtxPtr;
+			return std::unique_ptr<Scene>(new PlayScene(std::move(playCtx)));
+		});
 	}
 	if (wantOptions_) {
 		// return Transition::Push([]{ return std::make_unique<OptionsScene>(); });
