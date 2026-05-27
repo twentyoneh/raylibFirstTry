@@ -24,6 +24,7 @@ int main(void)
     SetTraceLogLevel(LOG_DEBUG);
 
     InitWindow(1280, 720, "raylibFirstTry — top-down");
+    InitAudioDevice();   // нужно для AudioCache (см. audio/AudioCache.h)
     SetTargetFPS(60);
 
     MenuScheneContext ctx;
@@ -51,6 +52,7 @@ int main(void)
     }
 
     LOG_I("APP", "shutting down");
+    CloseAudioDevice();
     CloseWindow();
     return 0;
 }

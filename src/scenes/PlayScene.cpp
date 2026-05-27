@@ -12,6 +12,7 @@
 #include "../progression/UpgradePool.h"
 #include "../progression/XpTable.h"
 #include "../util/Log.h"
+#include "../Paths.h"
 #include "raymath.h"
 #include <algorithm>
 #include <cmath>
@@ -179,8 +180,9 @@ void PlayScene::updatePlayer_(float dt)
         if (Vector2LengthSqr(dir) > 0.0001f) {
             dir = Vector2Normalize(dir);
             float dmgBuff = player_.buffs().multiplier(Buff::Stat::DamageMul);
-            player_.weapon()->tryFire(origin, dir, bullets_,
-                                      ownedCtx_->bullets, dmgBuff);
+            bool fired = player_.weapon()->tryFire(origin, dir, bullets_,
+                                                   ownedCtx_->bullets, dmgBuff);
+            if (fired) ownedCtx_->audio.play("shot", paths::sfx::shotBasic, 0.6f);
         }
     }
 }
@@ -260,14 +262,24 @@ void PlayScene::resolveCollisions_()
             e.damage(b.damage);
             b.active = false;
             hit = true;
+            ownedCtx_->audio.play("hit", paths::sfx::hit, 0.5f);
 
             if (!e.alive()) {
                 int xpGain = e.xpValue();
                 score_ += e.isBoss() ? 100 : 10;
                 stats_.kills++;
-                if (e.isBoss()) stats_.bossKills++;
+                if (e.isBoss()) {
+                    stats_.bossKills++;
+                    ownedCtx_->audio.play("boss_death", paths::sfx::bossDeath, 0.9f);
+                } else {
+                    ownedCtx_->audio.play("enemy_death", paths::sfx::enemyDeath, 0.6f);
+                }
+                int upsBefore = pendingUpgrades_;
                 int ups = player_.gainXp(xpGain);
                 pendingUpgrades_ += ups;
+                if (ups > 0 && upsBefore == 0) {
+                    ownedCtx_->audio.play("level_up", paths::sfx::levelUp, 0.9f);
+                }
 
                 float r = (float)GetRandomValue(0, 100000) / 100000.f;
                 if (r < e.weaponDropChance()) {
@@ -286,6 +298,7 @@ void PlayScene::resolveCollisions_()
         float rr = player_.radius() + e.radius();
         if (Vector2DistanceSqr(player_.position(), e.position()) <= rr * rr) {
             player_.damage(e.touchDamage());
+            ownedCtx_->audio.play("player_hurt", paths::sfx::playerHurt, 0.7f);
             // Hp=1 мобы и так умрут от тарана при kill(); Tank/Shooter/Boss выживают.
             if (e.kind() == EnemyKind::Chaser || e.kind() == EnemyKind::Runner) {
                 e.kill();
@@ -300,6 +313,7 @@ void PlayScene::resolveCollisions_()
         if (Vector2DistanceSqr(b.pos, player_.position()) <= rr * rr) {
             player_.damage(b.damage);
             b.active = false;
+            ownedCtx_->audio.play("player_hurt", paths::sfx::playerHurt, 0.7f);
         }
     }
 
@@ -309,6 +323,9 @@ void PlayScene::resolveCollisions_()
         float rr = player_.radius() + p->radius();
         if (Vector2DistanceSqr(player_.position(), p->position()) <= rr * rr) {
             p->onPickup(player_);
+            if (p->consumed()) {
+                ownedCtx_->audio.play("pickup", paths::sfx::pickup, 0.8f);
+            }
         }
     }
 }
@@ -334,13 +351,13 @@ void PlayScene::maybeSpawnEnemy_(float /*dt*/)
 void PlayScene::maybeSpawnBoss_()
 {
     if (!wave_.shouldSpawnBoss()) return;
-    // Спавним босса по фиксированному смещению от игрока.
     Vector2 pos = {
         player_.position().x + 220.f,
         player_.position().y + 220.f
     };
     enemies_.emplace_back(pos, Enemy::bossStats(wave_.wave()));
     wave_.notifyBossSpawned();
+    ownedCtx_->audio.play("boss_warn", paths::sfx::bossWarn, 1.0f);
     LOG_I("SCENE", "BOSS spawned at (%.0f, %.0f)", pos.x, pos.y);
 }
 

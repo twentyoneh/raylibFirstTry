@@ -12,6 +12,7 @@
 #include "../config/PlayInput.h"
 #include "../units/BulletFactory.h"
 #include "../gfx/TextureCache.h"
+#include "../audio/AudioCache.h"
 #include "../pickups/DropTable.h"
 
 struct MenuScheneContext;  // forward — нужен только указатель для возврата в меню
@@ -21,6 +22,7 @@ struct PlaySceneContext : SceneContext
     PlayInput     input{};
     BulletFactory bullets{};
     TextureCache  textures{};
+    AudioCache    audio{};
     DropTable     dropTable = DropTable::defaultTable();
 
     // Указатель на контекст меню — живёт всё время в main.cpp на стеке.

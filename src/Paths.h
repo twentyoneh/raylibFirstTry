@@ -15,8 +15,16 @@ namespace tex {
 }
 
 namespace sfx {
-    // Заготовка под звуки — добавляй по мере появления .wav в resources/sounds/
-    // inline constexpr const char* shotBasic  = "resources/sounds/shot_basic.wav";
+    // Звуковые ключи + пути. Если файл не появится — AudioCache просто
+    // молчит и кидает варнинг один раз (см. audio/AudioCache.h).
+    inline constexpr const char* shotBasic   = "resources/sounds/shot.wav";
+    inline constexpr const char* hit         = "resources/sounds/hit.wav";
+    inline constexpr const char* enemyDeath  = "resources/sounds/enemy_death.wav";
+    inline constexpr const char* playerHurt  = "resources/sounds/player_hurt.wav";
+    inline constexpr const char* levelUp     = "resources/sounds/level_up.wav";
+    inline constexpr const char* pickup      = "resources/sounds/pickup.wav";
+    inline constexpr const char* bossWarn    = "resources/sounds/boss_warn.wav";
+    inline constexpr const char* bossDeath   = "resources/sounds/boss_death.wav";
 }
 
 namespace font {
