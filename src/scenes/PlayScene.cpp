@@ -1,6 +1,8 @@
 #include "PlayScene.h"
 #include "UpgradeScene.h"
 #include "UpgradeSceneContext.h"
+#include "PauseScene.h"
+#include "PauseSceneContext.h"
 #include "MenuScene.h"
 #include "MenuSceneContext.h"
 #include "../weapons/BasicGun.h"
@@ -56,17 +58,32 @@ void PlayScene::handleInputT(PlaySceneContext& ctx)
     aimWorld_ = GetScreenToWorld2D(GetMousePosition(), cam_);
 
     if (ctx.input.pressed(Action::Pause)) {
-        LOG_I("SCENE", "exit requested (Pause)");
-        wantExit_ = true;
+        // Раньше Esc сразу выходил — теперь пушит PauseScene.
+        pauseRequested_ = true;
     }
 }
 
 Transition PlayScene::updateT(PlaySceneContext& ctx, float dt)
 {
-    // Esc / Pause → возврат в главное меню (раньше было Exit, что закрывало игру).
-    if (wantExit_) {
-        LOG_I("SCENE", "exit to menu requested");
+    // Запрос выхода в меню от подсцены (PauseScene/RunSummary) — обрабатываем
+    // первым, иначе можно ускакать в следующие подсистемы.
+    if (exitToMenuRequested_) {
+        LOG_I("SCENE", "exit to menu requested by sub-scene");
         return swapToMenu(ownedCtx_->menuCtx);
+    }
+
+    // Esc / Pause → push PauseScene поверх (играет роль паузы).
+    if (pauseRequested_) {
+        pauseRequested_ = false;
+        bool* exitFlag = &exitToMenuRequested_;
+        int sw = ownedCtx_->screenW, sh = ownedCtx_->screenH;
+        return Transition::Push([exitFlag, sw, sh]() -> std::unique_ptr<Scene> {
+            auto pctx = std::make_unique<PauseSceneContext>();
+            pctx->screenW = sw;
+            pctx->screenH = sh;
+            pctx->exitToMenuFlag = exitFlag;
+            return std::make_unique<PauseScene>(std::move(pctx));
+        });
     }
 
     // Смерть игрока → возврат в меню (а не закрытие приложения).

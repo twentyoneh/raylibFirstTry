@@ -42,12 +42,16 @@ private:
 
     Player    player_;
     Camera2D  cam_{};
-    bool      wantExit_{ false };
 
     // Намерение за кадр
     Vector2 moveWish_{};
     bool    fireHeld_{ false };
     Vector2 aimWorld_{};
+
+    // Запросы из вложенных сцен (Pause/RunSummary). Подсцена ставит флаг
+    // через указатель в своём ctx и делает Pop; мы реагируем тут.
+    bool pauseRequested_      = false;
+    bool exitToMenuRequested_ = false;
 
     WaveManager wave_;
     int   pendingUpgrades_ = 0;  // сколько раз надо показать UpgradeScene подряд
