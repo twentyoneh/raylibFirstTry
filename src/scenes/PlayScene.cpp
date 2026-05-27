@@ -3,6 +3,8 @@
 #include "UpgradeSceneContext.h"
 #include "PauseScene.h"
 #include "PauseSceneContext.h"
+#include "RunSummaryScene.h"
+#include "RunSummarySceneContext.h"
 #include "MenuScene.h"
 #include "MenuSceneContext.h"
 #include "../weapons/BasicGun.h"
@@ -65,11 +67,22 @@ void PlayScene::handleInputT(PlaySceneContext& ctx)
 
 Transition PlayScene::updateT(PlaySceneContext& ctx, float dt)
 {
-    // Запрос выхода в меню от подсцены (PauseScene/RunSummary) — обрабатываем
-    // первым, иначе можно ускакать в следующие подсистемы.
+    // Запросы из подсцен — обрабатываем первыми, чтобы не тратить кадр на
+    // обновление в неконсистентном состоянии (мёртвый игрок и т.п.).
     if (exitToMenuRequested_) {
         LOG_I("SCENE", "exit to menu requested by sub-scene");
         return swapToMenu(ownedCtx_->menuCtx);
+    }
+    if (restartRequested_) {
+        LOG_I("SCENE", "restart requested — swapping to fresh PlayScene");
+        MenuScheneContext* menuCtxPtr = ownedCtx_->menuCtx;
+        return Transition::Swap([menuCtxPtr]() -> std::unique_ptr<Scene> {
+            auto playCtx = std::make_unique<PlaySceneContext>();
+            playCtx->screenW = GetScreenWidth();
+            playCtx->screenH = GetScreenHeight();
+            playCtx->menuCtx = menuCtxPtr;
+            return std::make_unique<PlayScene>(std::move(playCtx));
+        });
     }
 
     // Esc / Pause → push PauseScene поверх (играет роль паузы).
@@ -86,14 +99,35 @@ Transition PlayScene::updateT(PlaySceneContext& ctx, float dt)
         });
     }
 
-    // Смерть игрока → возврат в меню (а не закрытие приложения).
+    // Смерть игрока → один раз пушим RunSummary с итогами.
+    if (!player_.alive() && !summaryShown_) {
+        summaryShown_ = true;
+        LOG_W("SCENE", "player dead — pushing RunSummaryScene");
+        // Снэпшот статистики в локалку для лямбды.
+        RunStats snap = stats_;
+        snap.wave  = wave_.wave();
+        snap.level = player_.level();
+        snap.xp    = player_.xp();
+        snap.score = score_;
+        bool* exitFlag    = &exitToMenuRequested_;
+        bool* restartFlag = &restartRequested_;
+        int sw = ownedCtx_->screenW, sh = ownedCtx_->screenH;
+        return Transition::Push([snap, exitFlag, restartFlag, sw, sh]() -> std::unique_ptr<Scene> {
+            auto rctx = std::make_unique<RunSummarySceneContext>();
+            rctx->screenW = sw;
+            rctx->screenH = sh;
+            rctx->stats = snap;
+            rctx->exitToMenuFlag = exitFlag;
+            rctx->restartFlag    = restartFlag;
+            return std::make_unique<RunSummaryScene>(std::move(rctx));
+        });
+    }
     if (!player_.alive()) {
-        LOG_W("SCENE", "player dead, returning to menu");
-        return swapToMenu(ownedCtx_->menuCtx);
+        // Уже показали summary — ничего не делаем, ждём действия игрока.
+        return Transition::None();
     }
 
     // Если накопились level-up'ы — пушим UpgradeScene по одному за раз.
-    // SceneStack заморозит PlayScene; pendingUpgrades_ декрементится после возврата.
     if (pendingUpgrades_ > 0) {
         return tryPushUpgrade_();
     }
@@ -102,6 +136,9 @@ Transition PlayScene::updateT(PlaySceneContext& ctx, float dt)
     // Реальное dt используется только там, где скорость экрана важна
     // (камера, UI-анимации). Подсистемы геймплея тикаются по gameDt.
     const float gameDt = dt * gameTimeMul_;
+
+    // Накапливаем "время жизни" — используется в RunSummary.
+    stats_.timeAlive += gameDt;
 
     updatePlayer_(gameDt);
     updateBullets_(gameDt);
@@ -215,6 +252,8 @@ void PlayScene::resolveCollisions_()
             if (!e.alive()) {
                 int xpGain = e.xpValue();
                 score_ += e.isBoss() ? 100 : 10;
+                stats_.kills++;
+                if (e.isBoss()) stats_.bossKills++;
                 int ups = player_.gainXp(xpGain);
                 pendingUpgrades_ += ups;
 

@@ -22,6 +22,7 @@
 #include "../pickups/Pickup.h"
 #include "../waves/WaveManager.h"
 #include "../util/SpatialGrid.h"
+#include "RunStats.h"
 #include <memory>
 #include <vector>
 
@@ -52,6 +53,10 @@ private:
     // через указатель в своём ctx и делает Pop; мы реагируем тут.
     bool pauseRequested_      = false;
     bool exitToMenuRequested_ = false;
+    bool restartRequested_    = false;
+    bool summaryShown_        = false;   // чтобы не пушить RunSummary дважды
+
+    RunStats stats_{};
 
     WaveManager wave_;
     int   pendingUpgrades_ = 0;  // сколько раз надо показать UpgradeScene подряд
