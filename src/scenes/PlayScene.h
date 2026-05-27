@@ -52,6 +52,15 @@ private:
     int   pendingUpgrades_ = 0;  // сколько раз надо показать UpgradeScene подряд
     int   score_ = 0;            // косметическое (на HUD)
 
+    // Множитель «игрового времени». 1.0 — обычная скорость, 0.0 — пауза,
+    // 0.3 — slow-mo. Влияет на ВСЕ подсистемы через единый gameDt в updateT.
+    // UI/камера используют реальный dt (не зависят от slow-mo).
+    float gameTimeMul_ = 1.0f;
+public:
+    void setGameTimeMul(float m) { gameTimeMul_ = m; }
+    float gameTimeMul() const { return gameTimeMul_; }
+private:
+
     std::vector<Bullet>                  bullets_;
     std::vector<Enemy>                   enemies_;
     std::vector<std::unique_ptr<Pickup>> pickups_;

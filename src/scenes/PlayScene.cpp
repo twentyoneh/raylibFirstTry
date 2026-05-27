@@ -81,19 +81,24 @@ Transition PlayScene::updateT(PlaySceneContext& ctx, float dt)
         return tryPushUpgrade_();
     }
 
-    updatePlayer_(dt);
-    updateBullets_(dt);
-    updateEnemies_(dt);
-    updatePickups_(dt);
-    updateAbilities_(dt);
+    // ВНИМАНИЕ: gameDt — это «игровое» время с учётом slow-mo/паузы.
+    // Реальное dt используется только там, где скорость экрана важна
+    // (камера, UI-анимации). Подсистемы геймплея тикаются по gameDt.
+    const float gameDt = dt * gameTimeMul_;
+
+    updatePlayer_(gameDt);
+    updateBullets_(gameDt);
+    updateEnemies_(gameDt);
+    updatePickups_(gameDt);
+    updateAbilities_(gameDt);
     resolveCollisions_();
 
     // Волны: тикаем менеджер, спавним моба или босса по сигналу.
-    wave_.update(dt);
-    maybeSpawnEnemy_(dt);
+    wave_.update(gameDt);
+    maybeSpawnEnemy_(gameDt);
     maybeSpawnBoss_();
 
-    // Камера плавно тянется к игроку (framerate-independent).
+    // Камера плавно тянется к игроку — реальное dt, чтобы не лагать на slow-mo.
     Vector2 target = player_.position();
     float k = 1.0f - powf(0.001f, dt);
     cam_.target.x += (target.x - cam_.target.x) * k;
